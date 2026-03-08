@@ -2,10 +2,19 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit;
 }
 
+include "db.php";
+?>
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: login.php");
     exit;
