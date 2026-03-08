@@ -1,0 +1,66 @@
+2026-03-07 14:56:37 =====================================
+POST data diterima:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [tugasan] => Mesyuarat di JBCC dengan Encik Ali – ujian debug 2026
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+SESSION user_id: nafie
+
+2026-03-07 14:56:37 - Nilai selepas trim & cast:
+tugasan       : 'Mesyuarat di JBCC dengan Encik Ali – ujian debug 2026'
+jumlah_jarak   : 3555
+id (edit)      : 4
+
+2026-03-07 14:56:37 - Parameter untuk UPDATE (id=4):
+tugasan → 'Mesyuarat di JBCC dengan Encik Ali – ujian debug 2026'
+catatan → 'waja hitam'
+
+2026-03-07 15:07:24 =====================================
+POST data diterima:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [tugasan] => Ujian selepas betulkan field type – 2026
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+SESSION user_id: nafie
+
+2026-03-07 15:07:24 - Nilai selepas trim & cast:
+tugasan       : 'Ujian selepas betulkan field type – 2026'
+jumlah_jarak   : 3555
+id (edit)      : 4
+
+2026-03-07 15:07:24 - Parameter untuk UPDATE (id=4):
+tugasan → 'Ujian selepas betulkan field type – 2026'
+catatan → 'waja hitam'
+

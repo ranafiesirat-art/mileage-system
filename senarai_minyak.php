@@ -6,34 +6,47 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 include "db.php";
 
-// Filter
-$bulan_filter = $_GET['bulan'] ?? '';
-$tahun_filter = $_GET['tahun'] ?? '';
+$filter_bulan      = isset($_GET['bulan']) ? (int)$_GET['bulan'] : date('n');
+$filter_tahun      = isset($_GET['tahun']) ? (int)$_GET['tahun'] : date('Y');
+$filter_no_kad     = trim($_GET['no_kad_minyak'] ?? '');
 
-$sql = "SELECT * FROM mileage_minyak WHERE 1=1";
+$sql = "SELECT * FROM mileage_minyak";
+$where = [];
 $params = [];
 $types = "";
 
-if ($bulan_filter) {
-    $sql .= " AND MONTH(tarikh) = ?";
-    $params[] = $bulan_filter;
+if ($filter_bulan > 0 && $filter_bulan <= 12) {
+    $where[] = "MONTH(tarikh) = ?";
+    $params[] = $filter_bulan;
     $types .= "i";
 }
-if ($tahun_filter) {
-    $sql .= " AND YEAR(tarikh) = ?";
-    $params[] = $tahun_filter;
+if ($filter_tahun > 0) {
+    $where[] = "YEAR(tarikh) = ?";
+    $params[] = $filter_tahun;
     $types .= "i";
 }
-$sql .= " ORDER BY tarikh DESC, created_at DESC";
+if (!empty($filter_no_kad)) {
+    $where[] = "no_kad_minyak LIKE ?";
+    $params[] = "%$filter_no_kad%";
+    $types .= "s";
+}
+
+if (!empty($where)) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+$sql .= " ORDER BY id DESC";
 
 $stmt = $conn->prepare($sql);
 if ($stmt) {
-    if ($types) $stmt->bind_param($types, ...$params);
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $result = $conn->query("SELECT * FROM mileage_minyak ORDER BY tarikh DESC, created_at DESC");
+    die("Query error: " . $conn->error);
 }
+$total_rekod = $result->num_rows;
 ?>
 <!DOCTYPE html>
 <html lang="ms">
@@ -45,121 +58,134 @@ if ($stmt) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --success: #2e7d32;
-            --success-light: #4caf50;
+            --primary: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --success: #198754;
             --light-bg: #f8f9fa;
             --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --hover-bg: #e7f1ff;
         }
-        body { background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%); min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--light-bg); min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
         .main-content { margin-left: 260px; padding: 3rem 2.5rem; }
-        .table-container { background: white; border-radius: 1.25rem; box-shadow: var(--card-shadow); overflow: hidden; }
-        .table thead { background: var(--success); color: white; }
-        .table th, .table td { vertical-align: middle; padding: 1rem; }
-        .filter-card { background: white; border-radius: 1rem; box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 2rem; }
-        .btn-filter { background: var(--success); border: none; transition: all 0.3s; }
-        .btn-filter:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(46,125,50,0.3); }
-        @media (max-width: 992px) { .main-content { margin-left: 0; padding: 2rem 1.5rem; } }
+        .page-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 2.5rem 2rem; border-radius: 1.25rem; margin-bottom: 2.5rem; box-shadow: var(--card-shadow); }
+        .filter-card { background: white; border-radius: 1.25rem; box-shadow: var(--card-shadow); padding: 2rem; margin-bottom: 2.5rem; transition: all 0.3s; }
+        .filter-card:hover { box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+        .table-container { background: white; border-radius: 1.25rem; overflow: hidden; box-shadow: var(--card-shadow); }
+        .table th { background: var(--primary); color: white; font-weight: 600; white-space: nowrap; text-align: center; }
+        .table td { vertical-align: middle; text-align: center; }
+        .table tr:hover { background-color: var(--hover-bg); }
+        .jumlah-rekod { font-size: 0.95rem; color: #6c757d; padding: 1rem; text-align: right; background: #f8f9fa; }
+        .no-data { text-align: center; padding: 5rem 2rem; color: #6c757d; font-size: 1.25rem; background: white; border-radius: 1.25rem; box-shadow: var(--card-shadow); }
+        .btn-filter { min-width: 140px; }
+        .action-btn { font-size: 1.1rem; padding: 0.4rem 0.8rem; }
+        @media (max-width: 992px) { .main-content { margin-left: 0; padding: 2rem 1.5rem; } .page-header { padding: 2rem 1.5rem; } }
     </style>
 </head>
 <body>
-
 <?php include "sidebar.php"; ?>
-
 <div class="main-content">
     <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold text-success">
-                <i class="bi bi-list-check me-3"></i>
-                Senarai Log Inden Minyak
-            </h2>
-            <a href="minyak_log.php" class="btn btn-success btn-lg">
-                <i class="bi bi-plus-lg me-2"></i>Tambah Log Baru
-            </a>
+        <div class="page-header text-center">
+            <h2 class="fw-bold mb-2"><i class="bi bi-fuel-pump me-2"></i>Senarai Log Inden Minyak</h2>
+            <p class="lead opacity-90 mb-0">Pantau & urus rekod inden minyak jabatan dengan mudah & profesional</p>
         </div>
 
         <div class="filter-card">
+            <h5 class="fw-bold mb-3 text-primary"><i class="bi bi-funnel-fill me-2"></i>Carian Lanjutan</h5>
             <form method="GET" class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">Bulan</label>
-                    <select name="bulan" class="form-select">
-                        <option value="">-- Semua Bulan --</option>
-                        <?php for($m=1; $m<=12; $m++): ?>
-                            <option value="<?= $m ?>" <?= $bulan_filter == $m ? 'selected' : '' ?>>
-                                <?= date("F", mktime(0,0,0,$m,1)) ?>
-                            </option>
+                <div class="col-md-3 col-sm-6">
+                    <label class="form-label fw-bold">Bulan</label>
+                    <select name="bulan" class="form-select form-select-lg">
+                        <option value="">Semua Bulan</option>
+                        <?php for ($m = 1; $m <= 12; $m++): ?>
+                            <option value="<?= $m ?>" <?= $filter_bulan == $m ? 'selected' : '' ?>><?= date('F', mktime(0,0,0,$m,1)) ?></option>
                         <?php endfor; ?>
                     </select>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Tahun</label>
-                    <select name="tahun" class="form-select">
-                        <option value="">-- Semua Tahun --</option>
-                        <?php for($y = date('Y')-2; $y <= date('Y')+1; $y++): ?>
-                            <option value="<?= $y ?>" <?= $tahun_filter == $y ? 'selected' : '' ?>><?= $y ?></option>
+                <div class="col-md-3 col-sm-6">
+                    <label class="form-label fw-bold">Tahun</label>
+                    <select name="tahun" class="form-select form-select-lg">
+                        <option value="">Semua Tahun</option>
+                        <?php for ($y = date('Y') - 2; $y <= date('Y') + 1; $y++): ?>
+                            <option value="<?= $y ?>" <?= $filter_tahun == $y ? 'selected' : '' ?>><?= $y ?></option>
                         <?php endfor; ?>
                     </select>
                 </div>
-
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-success btn-filter w-100">
-                        <i class="bi bi-filter me-2"></i>Filter
-                    </button>
+                <div class="col-md-6 col-sm-6">
+                    <label class="form-label fw-bold">No Kad MinYak</label>
+                    <input type="text" name="no_kad_minyak" class="form-control form-control-lg" value="<?= htmlspecialchars($filter_no_kad) ?>" placeholder="Contoh: KM123456 atau 987654">
+                </div>
+                <div class="col-12 text-end mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 me-2 btn-filter"><i class="bi bi-search me-2"></i> Cari</button>
+                    <a href="senarai_minyak.php" class="btn btn-outline-secondary btn-lg px-4 btn-filter"><i class="bi bi-arrow-repeat me-2"></i> Reset Semua</a>
                 </div>
             </form>
         </div>
 
-        <div class="table-container">
-            <table class="table table-hover table-striped mb-0">
-                <thead>
-                    <tr>
-                        <th>Tarikh</th>
-                        <th>Pemegang Kad</th>
-                        <th>Jumlah (RM)</th>
-                        <th>Jumlah (Liter)</th>
-                        <th>Jenis Minyak</th>
-                        <th>Odometer</th>
-                        <th>Syarikat</th>
-                        <th>Lokasi</th>
-                        <th>Resit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($result->num_rows > 0): ?>
-                        <?php while($row = $result->fetch_assoc()): ?>
+        <?php if ($result->num_rows > 0): ?>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
                             <tr>
-                                <td><?= htmlspecialchars($row['tarikh']) ?></td>
-                                <td><?= htmlspecialchars($row['pemegang_kad']) ?></td>
-                                <td class="fw-bold text-success">RM <?= number_format($row['jumlah_isian_rm'], 2) ?></td>
-                                <td><?= number_format($row['jumlah_isian_liter'], 2) ?> L</td>
-                                <td><?= htmlspecialchars($row['jenis_minyak']) ?></td>
-                                <td><?= number_format($row['no_odometer'], 1) ?> KM</td>
-                                <td><?= htmlspecialchars($row['nama_syarikat']) ?></td>
-                                <td><?= htmlspecialchars($row['lokasi']) ?></td>
-                                <td><?= htmlspecialchars($row['rujukan_resit'] ?: '-') ?></td>
+                                <th>ID</th>
+                                <th>Tarikh</th>
+                                <th>No Kad MinYak</th>
+                                <th>Pemegang Kad</th>
+                                <th>Jumlah Isian (RM)</th>
+                                <th>Jumlah Isian (Liter)</th>
+                                <th>Jenis Minyak</th>
+                                <th>No. Odometer (KM)</th>
+                                <th>Nama Syarikat</th>
+                                <th>Lokasi Stesen</th>
+                                <th>Rujukan Resit</th>
+                                <th>Gambar Resit</th>
+                                <th>Action</th>
+                                <th>Dicipta Pada</th>
                             </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="9" class="text-center text-muted py-5">
-                                <i class="bi bi-exclamation-circle fs-1 d-block mb-3"></i>
-                                Tiada rekod inden minyak lagi.<br>
-                                Sila tambah log baru.
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="text-end mt-4">
-            <a href="index.php" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard
-            </a>
-        </div>
+                        </thead>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()): ?>
+                                <tr>
+                                    <td class="fw-bold text-center"><?= htmlspecialchars($row['id'] ?? '-') ?></td>
+                                    <td><?= htmlspecialchars($row['tarikh'] ?? '-') ?></td>
+                                    <td class="fw-bold"><?= htmlspecialchars($row['no_kad_minyak'] ?? '-') ?></td>
+                                    <td><?= htmlspecialchars($row['pemegang_kad'] ?? '-') ?></td>
+                                    <td class="fw-bold text-success text-end">RM <?= number_format($row['jumlah_isian_rm'] ?? 0, 2) ?></td>
+                                    <td class="text-end"><?= number_format($row['jumlah_isian_liter'] ?? 0, 2) ?></td>
+                                    <td><?= htmlspecialchars($row['jenis_minyak'] ?? '-') ?></td>
+                                    <td class="text-end"><?= number_format($row['no_odometer'] ?? 0, 1) ?></td>
+                                    <td><?= htmlspecialchars($row['nama_syarikat'] ?? '-') ?></td>
+                                    <td><?= htmlspecialchars($row['lokasi'] ?? '-') ?></td>
+                                    <td><?= htmlspecialchars($row['rujukan_resit'] ?? '-') ?></td>
+                                    <td>
+                                        <?php if (!empty($row['resit_path'])): ?>
+                                            <a href="<?= htmlspecialchars($row['resit_path']) ?>" target="_blank"><i class="bi bi-image fs-4 text-primary"></i></a>
+                                        <?php else: ?> - <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <a href="edit_minyak.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
+                                        <a href="delete_minyak.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger action-btn" title="Padam" onclick="return confirm('Anda pasti mahu padam rekod ini?');"><i class="bi bi-trash"></i></a>
+                                    </td>
+                                    <td class="text-muted small"><?= htmlspecialchars($row['created_at'] ?? '-') ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="jumlah-rekod bg-light p-3 text-end">
+                    Menunjukkan <?= $total_rekod ?> rekod
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="no-data bg-white rounded-3 shadow p-5 text-center">
+                <i class="bi bi-exclamation-circle-fill fs-1 text-warning mb-3 d-block"></i>
+                <h5 class="text-muted mb-2">Tiada rekod inden minyak ditemui</h5>
+                <small>Cuba ubah pilihan carian atau log inden minyak baru melalui menu Log Inden Minyak.</small>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

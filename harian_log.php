@@ -5,7 +5,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 include "db.php";
-
 $success_msg = $_SESSION['success'] ?? '';
 $error_msg = $_SESSION['error'] ?? '';
 unset($_SESSION['success'], $_SESSION['error']);
@@ -19,252 +18,211 @@ unset($_SESSION['success'], $_SESSION['error']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
+        /* Style asal, tak ubah */
         :root {
-            --primary: #0d47a1;          /* Biru lebih dalam, korporat */
-            --primary-light: #1565c0;
-            --primary-glow: rgba(13, 71, 161, 0.2);
-            --success: #2e7d32;
-            --light-bg: #f5f7fa;
-            --card-bg: white;
-            --shadow: 0 12px 35px rgba(0,0,0,0.09);
-            --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --primary: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --success: #198754;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: #1a1a1a;
-        }
-        .main-content {
-            margin-left: 260px;
-            padding: 3.5rem 3rem;
-        }
-        .header-banner {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        body { background: var(--light-bg); min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+        .main-content { margin-left: 260px; padding: 3rem 2.5rem; }
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
+            padding: 2.5rem 2rem;
             border-radius: 1.25rem;
-            padding: 2.5rem 3rem;
             margin-bottom: 2.5rem;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
+            box-shadow: var(--card-shadow);
         }
-        .header-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-            opacity: 0.6;
-        }
-        .page-title {
-            font-size: 2.25rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .form-pro-card {
-            background: var(--card-bg);
+        .form-card {
+            background: white;
             border-radius: 1.5rem;
-            box-shadow: var(--shadow);
-            padding: 3rem;
-            border: 1px solid rgba(13, 71, 161, 0.06);
+            box-shadow: var(--card-shadow);
+            padding: 2.5rem;
+            border: 1px solid rgba(13,110,253,0.1);
         }
-        .form-label {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #37474f;
-            margin-bottom: 0.6rem;
+        .form-floating > label { color: #6c757d; }
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label { color: var(--primary); }
+        .btn-submit {
+            padding: 0.85rem 3rem;
+            font-size: 1.15rem;
+            border-radius: 50px;
+            transition: all 0.3s;
         }
-        .form-control-lg, .form-select-lg {
-            font-size: 1.1rem;
-            padding: 0.85rem 1.25rem;
-            border-radius: 0.75rem;
-            border: 1px solid #d0d8e0;
-            transition: var(--transition);
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(25,135,84,0.3);
         }
-        .form-control-lg:focus, .form-select-lg:focus {
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 0.3rem var(--primary-glow);
-            background: #fff;
-        }
-        .input-group-lg .input-group-text {
-            background: rgba(13, 71, 161, 0.08);
-            border: none;
-            color: var(--primary);
-            border-radius: 0.75rem 0 0 0.75rem;
-        }
-        .btn-pro {
-            padding: 1rem 2.5rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            border-radius: 0.9rem;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(13,71,161,0.2);
-        }
-        .btn-pro:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(13,71,161,0.35);
-        }
-        .alert-dismissible {
-            border-radius: 1rem;
-            padding: 1.5rem;
-            font-size: 1.1rem;
+        #jumlah_jarak {
+            background-color: #e9ecef;
+            cursor: not-allowed;
         }
         @media (max-width: 992px) {
             .main-content { margin-left: 0; padding: 2rem 1.5rem; }
-            .form-pro-card { padding: 2rem; }
-            .header-banner { padding: 2rem; }
-            .page-title { font-size: 1.9rem; }
+            .page-header { padding: 2rem 1.5rem; }
         }
     </style>
 </head>
 <body>
-
 <?php include "sidebar.php"; ?>
-
 <div class="main-content">
     <div class="container-fluid">
-        <!-- Header Banner dengan Gambar -->
-        <div class="header-banner text-center position-relative">
-            <div class="position-absolute top-0 end-0 p-4 opacity-50">
-                <i class="bi bi-car-front-fill fs-1"></i>
-            </div>
-            <h2 class="page-title mb-2">Log Perjalanan Harian</h2>
-            <p class="lead opacity-90 mb-0">Rekod pergerakan kenderaan jabatan dengan tepat & mudah</p>
+        <div class="page-header text-center">
+            <h2 class="fw-bold mb-2">
+                <i class="bi bi-journal-plus me-2"></i>Log Perjalanan Harian
+            </h2>
+            <p class="lead opacity-90 mb-0">Catat perjalanan rasmi dengan lengkap & tepat</p>
         </div>
-
         <?php if ($success_msg): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill me-3 fs-4"></i> <?= htmlspecialchars($success_msg) ?>
+                <?= htmlspecialchars($success_msg) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         <?php endif; ?>
-
         <?php if ($error_msg): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i> <?= htmlspecialchars($error_msg) ?>
+                <?= htmlspecialchars($error_msg) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         <?php endif; ?>
-
-        <div class="form-pro-card">
+        <div class="form-card">
             <form method="POST" action="process_harian.php" class="row g-4">
-                <div class="col-md-4">
-                    <label class="form-label">Bulan</label>
-                    <select name="bulan" class="form-select form-select-lg" required>
-                        <?php for($m=1; $m<=12; $m++): ?>
-                            <option value="<?= $m ?>" <?= date('n') == $m ? 'selected' : '' ?>>
-                                <?= date("F", mktime(0,0,0,$m,1)) ?>
-                            </option>
-                        <?php endfor; ?>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Tahun</label>
-                    <select name="tahun" class="form-select form-select-lg" required>
-                        <?php for($y = date('Y')-1; $y <= date('Y')+1; $y++): ?>
-                            <option value="<?= $y ?>" <?= date('Y') == $y ? 'selected' : '' ?>><?= $y ?></option>
-                        <?php endfor; ?>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">No. Pendaftaran Kenderaan</label>
-                    <input type="text" name="no_pendaftaran" class="form-control form-control-lg" required 
-                           placeholder="Contoh: JDA1234" pattern="[A-Za-z0-9-]+" title="Huruf, nombor & tanda '-' dibenarkan">
-                </div>
-
                 <div class="col-md-6">
-                    <label class="form-label">Jenis Kenderaan</label>
-                    <input type="text" name="jenis_kenderaan" class="form-control form-control-lg" required placeholder="Contoh: Proton Saga, Perodua Myvi">
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Jabatan / Unit</label>
-                    <input type="text" name="jabatan" class="form-control form-control-lg" required placeholder="Contoh: Parking Admin Pontian">
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Tarikh Perjalanan</label>
-                    <input type="date" name="tarikh" class="form-control form-control-lg" value="<?= date('Y-m-d') ?>" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Masa Pergi</label>
-                    <input type="time" name="masa_pergi" class="form-control form-control-lg" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Masa Pulang</label>
-                    <input type="time" name="masa_pulang" class="form-control form-control-lg" required>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Nama Pemandu</label>
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-text bg-primary-subtle border-0"><i class="bi bi-person-fill text-primary"></i></span>
-                        <input type="text" name="nama_pemandu" class="form-control" required placeholder="Nama pemandu kenderaan">
+                    <div class="form-floating">
+                        <select name="bulan" class="form-select form-select-lg" id="bulan" required>
+                            <option value="">-- Pilih Bulan --</option>
+                            <?php for ($m = 1; $m <= 12; $m++): ?>
+                                <option value="<?= $m ?>" <?= date('n') == $m ? 'selected' : '' ?>>
+                                    <?= date('F', mktime(0,0,0,$m,1)) ?>
+                                </option>
+                            <?php endfor; ?>
+                        </select>
+                        <label for="bulan">Bulan</label>
                     </div>
                 </div>
-
                 <div class="col-md-6">
-                    <label class="form-label">Pegawai Pengguna</label>
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-text bg-primary-subtle border-0"><i class="bi bi-person-badge-fill text-primary"></i></span>
-                        <input type="text" name="pegawai_pengguna" class="form-control" required placeholder="Nama pegawai yang menggunakan">
+                    <div class="form-floating">
+                        <select name="tahun" class="form-select form-select-lg" id="tahun" required>
+                            <option value="">-- Pilih Tahun --</option>
+                            <?php for ($y = date('Y') - 1; $y <= date('Y') + 1; $y++): ?>
+                                <option value="<?= $y ?>" <?= date('Y') == $y ? 'selected' : '' ?>><?= $y ?></option>
+                            <?php endfor; ?>
+                        </select>
+                        <label for="tahun">Tahun</label>
                     </div>
                 </div>
-
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" name="no_siri_buku" class="form-control form-control-lg" id="no_siri_buku" placeholder="Contoh: SRB/2026/00123">
+                        <label for="no_siri_buku">No Siri Buku</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" name="no_kenderaan" class="form-control form-control-lg" id="no_kenderaan" required placeholder="Contoh: JDA 1234">
+                        <label for="no_kenderaan">No Kenderaan</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" name="nama_pemandu" class="form-control form-control-lg" id="nama_pemandu" required placeholder="Nama pemandu kenderaan">
+                        <label for="nama_pemandu">Nama Pemandu</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" name="nama_pengguna" class="form-control form-control-lg" id="nama_pengguna" required placeholder="Nama pegawai / pengguna">
+                        <label for="nama_pengguna">Nama Pengguna</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" name="jabatan" class="form-control form-control-lg" id="jabatan" required placeholder="Contoh: Seksyen Pentadbiran">
+                        <label for="jabatan">Jabatan</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" name="tarikh" class="form-control form-control-lg" id="tarikh" value="<?= date('Y-m-d') ?>" required>
+                        <label for="tarikh">Tarikh</label>
+                    </div>
+                </div>
                 <div class="col-12">
-                    <label class="form-label">Catatan / Tujuan Perjalanan</label>
-                    <textarea name="catatan" class="form-control" rows="4" placeholder="Contoh: Rondaan premis di Pontian Kechil, lawatan tapak, urusan rasmi..."></textarea>
+                    <div class="form-floating">
+                        <textarea name="keterangan_tugasan" class="form-control form-control-lg" id="keterangan_tugasan" rows="5" placeholder="Catat lokasi yang dilawati, nama orang yang ditemui, perkara penting, dll..." required></textarea>
+                        <label for="keterangan_tugasan">Keterangan Tugasan</label>
+                    </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Odometer Terakhir (KM)</label>
-                    <input type="number" name="odometer_terakhir" id="odometer_terakhir" step="0.1" class="form-control form-control-lg" required min="0" placeholder="Baca odometer sebelum bergerak">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" name="odo_mula" step="0.1" class="form-control form-control-lg" id="odo_mula" required min="0" placeholder="Contoh: 12345.0">
+                        <label for="odo_mula">Odo Meter Mula (KM)</label>
+                    </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Odometer Terkini (KM)</label>
-                    <input type="number" name="odometer_terkini" id="odometer_terkini" step="0.1" class="form-control form-control-lg" required min="0" placeholder="Baca odometer selepas pulang">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" name="odo_akhir" step="0.1" class="form-control form-control-lg" id="odo_akhir" required min="0" placeholder="Contoh: 12500.0">
+                        <label for="odo_akhir">Odo Meter Akhir (KM)</label>
+                    </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Jumlah Jarak (KM)</label>
-                    <input type="number" name="jumlah_jarak" id="jumlah_jarak" step="0.1" class="form-control form-control-lg bg-light fw-bold" readonly>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" name="jumlah_jarak" step="0.1" class="form-control form-control-lg" id="jumlah_jarak" required min="0" placeholder="Akan dikira secara automatik" readonly>
+                        <label for="jumlah_jarak">Jumlah Jarak (KM)</label>
+                    </div>
                 </div>
-
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="time" name="masa_pergi" class="form-control form-control-lg" id="masa_pergi" required>
+                        <label for="masa_pergi">Masa Pergi</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="time" name="masa_pulang" class="form-control form-control-lg" id="masa_pulang" required>
+                        <label for="masa_pulang">Masa Pulang</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea name="catatan" class="form-control form-control-lg" id="catatan" rows="5" placeholder="Catat lokasi yang dilawati, nama orang yang ditemui, perkara penting, dll..."></textarea>
+                        <label for="catatan">Catatan (Lokasi yang dilawati dll)</label>
+                    </div>
+                </div>
                 <div class="col-12 text-end mt-5">
-                    <button type="submit" class="btn btn-primary btn-pro px-5 py-3">
-                        <i class="bi bi-save-fill me-2 fs-4"></i> Simpan Log Perjalanan
+                    <button type="submit" class="btn btn-success btn-submit px-5">
+                        <i class="bi bi-save me-2"></i> Simpan Log Perjalanan
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <script>
-    const startInput = document.getElementById('odometer_terakhir');
-    const endInput = document.getElementById('odometer_terkini');
-    const jarakInput = document.getElementById('jumlah_jarak');
-
+    const odoMula = document.getElementById('odo_mula');
+    const odoAkhir = document.getElementById('odo_akhir');
+    const jumlahJarak = document.getElementById('jumlah_jarak');
     function calculateDistance() {
-        const start = parseFloat(startInput.value) || 0;
-        const end = parseFloat(endInput.value) || 0;
-        const distance = (end - start).toFixed(1);
-        jarakInput.value = distance >= 0 ? distance : '';
+        const mula = parseFloat(odoMula.value) || 0;
+        const akhir = parseFloat(odoAkhir.value) || 0;
+        const jarak = akhir - mula;
+        if (akhir > 0 && mula > 0) {
+            jumlahJarak.value = jarak.toFixed(1);
+            if (jarak < 0) {
+                jumlahJarak.style.color = 'red';
+            } else {
+                jumlahJarak.style.color = 'inherit';
+            }
+        } else {
+            jumlahJarak.value = '';
+        }
     }
-
-    startInput.addEventListener('input', calculateDistance);
-    endInput.addEventListener('input', calculateDistance);
+    odoMula.addEventListener('input', calculateDistance);
+    odoAkhir.addEventListener('input', calculateDistance);
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

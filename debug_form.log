@@ -1,0 +1,207 @@
+2026-03-07 15:53:56 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => INI UJIAN DEBUG 123456789
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:00:31 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => UJIAN DEBUG AFFECTED ROWS 2026
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:00:31 - UPDATE berjaya | Affected rows: 0 | ID: 4 | keterangan_tugasan disimpan: 'UJIAN DEBUG AFFECTED ROWS 2026'
+
+2026-03-07 16:07:47 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => wei
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:07:47 - UPDATE berjaya | Affected rows: 0 | ID: 4 | keterangan_tugasan disimpan: 'wei'
+
+2026-03-07 16:14:14 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => ultramen
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:14:14 - Raw ID dari POST: '4' | Cleaned ID: 4 | Type: string
+
+2026-03-07 16:14:14 - UPDATE berjaya | Affected rows: 0 | ID: 4 | keterangan_tugasan disimpan: 'ultramen'
+
+2026-03-07 16:19:07 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => DEBUG ROW EXIST 2026
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:19:07 - Raw ID dari POST: '4' | Cleaned ID: 4 | Type: string
+2026-03-07 16:19:07 - Rekod id=4 wujud sebelum update? YA | keterangan_tugasan cuba disimpan: 'DEBUG ROW EXIST 2026'
+
+2026-03-07 16:19:07 - UPDATE berjaya | Affected rows: 0 | ID: 4 | keterangan_tugasan disimpan: 'DEBUG ROW EXIST 2026'
+
+2026-03-07 16:22:42 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => INI PERUBAHAN BESAR 999999
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:22:42 - Raw ID dari POST: '4' | Cleaned ID: 4 | Type: string
+2026-03-07 16:22:42 - Rekod id=4 wujud sebelum update? YA | keterangan_tugasan cuba disimpan: 'INI PERUBAHAN BESAR 999999'
+
+2026-03-07 16:22:42 - UPDATE berjaya | Affected rows: 0 | ID: 4 | keterangan_tugasan disimpan: 'INI PERUBAHAN BESAR 999999'
+
+2026-03-07 16:32:30 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => NILAI MANUAL 2026
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:32:30 - Raw ID dari POST: '4' | Cleaned ID: 4 | Type: string
+2026-03-07 16:32:30 - Rekod id=4 wujud sebelum update? YA | keterangan_tugasan cuba disimpan: 'NILAI MANUAL 2026'
+
+2026-03-07 16:32:30 - UPDATE berjaya | Affected rows: 1 | ID: 4 | keterangan_tugasan disimpan: 'NILAI MANUAL 2026'
+
+2026-03-07 16:41:37 - POST data:
+Array
+(
+    [id] => 4
+    [bulan] => 3
+    [tahun] => 2026
+    [no_siri_buku] => 150
+    [no_kenderaan] => Q5554
+    [nama_pemandu] => NAPIE
+    [nama_pengguna] => RAIME
+    [jabatan] => Parking Pontian
+    [tarikh] => 2026-03-04
+    [keterangan_tugasan] => SEBELUM UJIAN 2026
+    [odo_mula] => 2000.0
+    [odo_akhir] => 5555.0
+    [jumlah_jarak] => 3555.0
+    [masa_pergi] => 08:00:00
+    [masa_pulang] => 15:00:00
+    [catatan] => waja hitam
+)
+
+
+2026-03-07 16:41:37 - Raw ID dari POST: '4' | Cleaned ID: 4 | Type: string
+2026-03-07 16:41:37 - Rekod id=4 wujud sebelum update? YA | keterangan_tugasan cuba disimpan: 'SEBELUM UJIAN 2026'
+
+2026-03-07 16:41:37 - UPDATE berjaya | Affected rows: 1 | ID: 4 | keterangan_tugasan disimpan: 'SEBELUM UJIAN 2026'
+
+2026-03-07 17:25:10 - Nilai yang AKAN diikat ke keterangan_tugasan: 'TEST AKHIR - NILAI INI WAJIB MASUK KE DB - 1234567890abcdefghi - boss napie' (length: 75 chars)
+2026-03-07 17:29:59 - Nilai yang AKAN diikat ke keterangan_tugasan: 'BOSS NAPIE - UJIAN AKHIR BERJAYA - 2026-03-07 17:30 - ALHAMDULILLAH MASUK BETUL' (length: 79 chars)
+2026-03-07 17:32:31 - Nilai yang AKAN diikat ke keterangan_tugasan: 'BOSS TEST 2026' (length: 14 chars)

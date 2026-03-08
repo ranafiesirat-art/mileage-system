@@ -1,8 +1,9 @@
 <?php
+// db.php
 $host = "localhost";
-$user = "root";           // default XAMPP
-$pass = "";               // default kosong
-$dbname = "parking_system";   // GANTI dengan nama database parking boss (contoh: db_parking, parking_system dll)
+$user = "root";
+$pass = "";
+$dbname = "parking_system";  // nama DB parking boss – jangan tukar kalau sama
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 
