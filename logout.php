@@ -9,6 +9,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirect ke halaman login PARKING SYSTEM (bukan mileage login)
-header("Location: http://localhost/parking-system/login.php");
+header("Location: /parking-system/login.php");
 exit;
 ?>
