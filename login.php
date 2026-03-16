@@ -172,7 +172,7 @@ if (isset($_GET['token'])) {
         <div class="login-header">
             <h3 class="mb-0 fw-bold">
                 <i class="bi bi-speedometer2 me-2"></i>
-                Login Mileage JQA2435
+                Login Mileage Kenderaan
             </h3>
             <small>Sistem Log Perjalanan & Inden Minyak</small>
         </div>
