@@ -62,7 +62,7 @@ $stmt->close();
 
             <!-- BARU: Kembali ke Parking System -->
             <li class="nav-item">
-                <a class="nav-link text-info d-flex align-items-center py-3 px-4 rounded" href="/parking-system/index.php">
+                <a class="nav-link text-info d-flex align-items-center py-3 px-4 rounded" href="https://parking.nrinnovations.my/index.php">
                     <i class="bi bi-arrow-left-circle fs-4 me-3"></i>
                     <span>Kembali ke Parking System</span>
                 </a>
