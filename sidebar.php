@@ -13,7 +13,7 @@ $stmt->close();
 ?>
 <nav class="sidebar bg-dark text-white position-fixed top-0 start-0 h-100 overflow-auto" style="width: 260px; z-index: 1000; transition: all 0.3s;">
     <div class="p-4 text-center border-bottom border-secondary">
-        <h4 class="mb-1 fw-bold">Mileage Kenderaan</h4>
+        <h4 class="mb-1 fw-bold">Mileage Kenderaan JQA 2435</h4>
         <small class="opacity-75">Sistem Inden & Log Perjalanan</small>
     </div>
    
