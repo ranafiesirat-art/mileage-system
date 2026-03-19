@@ -1,5 +1,5 @@
 @echo off
-title Mileage System - One Click Deploy
+title Mileage System - Deploy
 
 echo ===============================
 echo MILEAGE SYSTEM DEPLOY
@@ -12,10 +12,11 @@ set /p msg=Enter commit message:
 
 git add .
 git commit -m "%msg%"
-git push
+git push origin main
 
 echo.
 echo ===============================
-echo DEPLOY COMPLETE
+echo DEPLOY COMPLETE (MILEAGE)
 echo ===============================
+
 pause

@@ -72,7 +72,7 @@ unset($_SESSION['success'], $_SESSION['error']);
     <div class="container-fluid">
         <div class="page-header text-center">
             <h2 class="fw-bold mb-2">
-                <i class="bi bi-journal-plus me-2"></i>Log Perjalanan Harian
+                <i class="bi bi-journal-plus me-2"></i>Log/Catatan Perjalanan Harian
             </h2>
             <p class="lead opacity-90 mb-0">Catat perjalanan rasmi dengan lengkap & tepat</p>
         </div>
