@@ -118,7 +118,7 @@ $stmt_fuel_chart->close();
     <div class="container-fluid">
 
         <div class="welcome-banner text-center">
-            <h2 class="fw-bold mb-2">Selamat Datang sahaja, <?= htmlspecialchars($_SESSION['nama_pegawai'] ?? $_SESSION['username'] ?? 'Admin') ?>!</h2>
+            <h2 class="fw-bold mb-2">Selamat Datang kembali, <?= htmlspecialchars($_SESSION['nama_pegawai'] ?? $_SESSION['username'] ?? 'Admin') ?>!</h2>
             <p class="lead opacity-90 mb-0">Pantau penggunaan kenderaan & bahan api jabatan dengan mudah</p>
         </div>
 
